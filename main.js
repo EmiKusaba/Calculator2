@@ -1,10 +1,7 @@
-//Define DOM elements
 const display = document.querySelector('#display');
-const keys = document.querySelector('.keys');
+const key = document.querySelector('.key');
 const operators = document.querySelectorAll('.operator');
 const cleared = document.querySelector('#clear');
-
-//Declare variables to be used later
 let firstOperand,
     operatorValue,
     secondOperand = null,
@@ -16,37 +13,30 @@ let firstOperand,
     wasEqualed = false;
 
 
-//Listen for click events
-keys.addEventListener('click', e => {
+key.addEventListener('click', e => {
     let value = e.target.value;
     let buttonId = e.target.id;
     let buttonClass = e.target.className;
-    //Determine which button was clicked and run the corresponding function
     if (buttonClass === 'number') currentNumber(+value)
     else if (buttonClass === 'operator') currentOperator(value)
     else if (buttonId === 'equals') equals();
     else if (buttonId === 'decimal') decimal();
     else if (buttonId === 'percent') percent();
     else if (buttonId === 'negative') negative();
-    else if (buttonId === 'clear') cleared.innerText === 'C' ? clear() : clearAll();
+    else if (buttonId === 'clear') clearAll();
     e.target.blur()
 })
 
-//Listen for keyboard events
 document.addEventListener('keyup', e => {
     let value = e.key;
-    if (/[0-9]/.test(value)) currentNumber(+value);
+    if (/[0-9]/.test(value)) currentNumber(value);
     else if (/[-+/*]/.test(value)) currentOperator(value);
-    else if (value === 'Equal' || value === 'Enter') equals();
+    else if (value === 'Equal') equals();
     else if (value === '.') decimal();
     else if (value === '%') percent();
-    else if (value === 'Backspace') clear();
-    else if (value === 'Delete') clearAll();
 })
 
-//Calculate and format the input
 function calculate(operand1, operator, operand2) {
-    //The switch statement is used to evaluate the equation based on its operator
     switch (operator) {
         case '-':
             result = operand1 - operand2;
@@ -61,7 +51,7 @@ function calculate(operand1, operator, operand2) {
             result = operand1 * operand2;
     }
     //The following code aims to correct floating point imprecision
-    result = Math.round(parseFloat(result) * Math.pow(10, 10)) / Math.pow(10, 10);
+    // result = Math.round(parseFloat(result) * Math.pow(10, 10)) / Math.pow(10, 10);
     display.innerHTML = format(result);
     return result;
 }
@@ -206,21 +196,21 @@ function negOrPos(num) {
     return num;
 }
 
-//Clear last input
-function clear() {
-    display.style.fontSize = '4rem'
-    if (tempOperand) {
-        tempOperand = null;
-    } else if (secondOperand) {
-        secondOperand = null;
+// //Clear last input
+// function clear() {
+//     display.style.fontSize = '4rem'
+//     if (tempOperand) {
+//         tempOperand = null;
+//     } else if (secondOperand) {
+//         secondOperand = null;
 
-        cleared.innerText = 'AC';
-    } else {
-        firstOperand = null;
-        cleared.innerText = 'AC';
-    }
-    display.innerText = '0';
-}
+//         cleared.innerText = 'AC';
+//     } else {
+//         firstOperand = null;
+//         cleared.innerText = 'AC';
+//     }
+//     display.innerText = '0';
+// }
 
 //Clear all input
 function clearAll() {
